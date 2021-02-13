@@ -74,25 +74,6 @@ public class App implements Runnable {
         this.args = args;
     }
 
-    // private static class MyApiClient extends ApiClient {
-    // public MyApiClient() {
-    // super();
-    // }
-
-    // @Override
-    // protected RestTemplate buildRestTemplate() {
-    // final RestTemplate restTemplate = super.buildRestTemplate();
-    // final ByteArrayHttpMessageConverter byteArrayHttpMessageConverter = new
-    // ByteArrayHttpMessageConverter();
-    // final List<MediaType> supportedMediaTypes = new ArrayList<>();
-    // final MediaType pdfApplication = new MediaType("application","pdf");
-    // supportedMediaTypes.add(pdfApplication);
-    // byteArrayHttpMessageConverter.setSupportedMediaTypes(supportedMediaTypes);
-    // restTemplate.getMessageConverters().add(byteArrayHttpMessageConverter);
-    // return restTemplate;
-    // }
-    // }
-
     private ApiClient apiClient = null;
 
     private ApiClient getApiClient() {
@@ -275,14 +256,6 @@ public class App implements Runnable {
             final SigTypeClick2Sign allowedSignatureType = new SigTypeClick2Sign();
             allowedSignatureType.stampImprintConfiguration(stampImprintConfiguration)
                     .id("89a057d6-8e35-410f-84d3-e26cf93da175").discriminatorType("SigTypeClick2Sign").preferred(true);
-
-            //final SigTypeAutomaticSignature allowedSignatureType = new SigTypeAutomaticSignature();
-            //allowedSignatureType
-            //    .id("89a057d6-8e35-410f-84d3-e26cf93da175")
-            //    .discriminatorType("SigTypeAutomaticSignature")
-            //    .preferred(true)
-            //    .sealingProfileId("89a057d6-8e35-410f-84d3-e26cf93da175")
-            //    .trModType("RemoteSignature");
 
             final Signature signature = new Signature();
             signature.positionPage(1).position(new Position().positionX(68.0).positionY(68.0))
