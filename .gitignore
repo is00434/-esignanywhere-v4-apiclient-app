@@ -1,0 +1,9 @@
+target/
+.vscode/
+.DS_Store
+.classpath
+.project
+.settings/
+Test.pdf
+Test2.pdf
+Test3.pdf
