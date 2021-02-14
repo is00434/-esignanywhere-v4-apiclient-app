@@ -7,21 +7,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Collections;
-import java.util.List;
-
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.ContentDisposition;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestClientException;
 
 import osplus.esignanywhere.v4.api.EnvelopeApi;
 import osplus.esignanywhere.v4.api.SspFileApi;
@@ -31,6 +16,7 @@ import osplus.esignanywhere.v4.model.AuditingToolsConfiguration;
 import osplus.esignanywhere.v4.model.ClientAction;
 import osplus.esignanywhere.v4.model.EnvelopeSendModel;
 import osplus.esignanywhere.v4.model.EnvelopeStatus;
+import osplus.esignanywhere.v4.model.EnvelopeStatus.StatusEnum;
 import osplus.esignanywhere.v4.model.FinishAction;
 import osplus.esignanywhere.v4.model.FinishedDocument;
 import osplus.esignanywhere.v4.model.FlowApiResult;
@@ -45,6 +31,7 @@ import osplus.esignanywhere.v4.model.SendEnvelopeDocumentOption;
 import osplus.esignanywhere.v4.model.SendEnvelopeRecipient;
 import osplus.esignanywhere.v4.model.SendEnvelopeResult;
 import osplus.esignanywhere.v4.model.SendEnvelopeStep;
+import osplus.esignanywhere.v4.model.SendEnvelopeStep.RecipientTypeEnum;
 import osplus.esignanywhere.v4.model.SenderInformation;
 import osplus.esignanywhere.v4.model.SigTypeClick2Sign;
 import osplus.esignanywhere.v4.model.Signature;
@@ -56,8 +43,6 @@ import osplus.esignanywhere.v4.model.ViewerPreferences;
 import osplus.esignanywhere.v4.model.VisibleAreaOptions;
 import osplus.esignanywhere.v4.model.WorkstepConfiguration;
 import osplus.esignanywhere.v4.model.WorkstepTasks;
-import osplus.esignanywhere.v4.model.EnvelopeStatus.StatusEnum;
-import osplus.esignanywhere.v4.model.SendEnvelopeStep.RecipientTypeEnum;
 import osplus.esignanywhere.v4.model.WorkstepTasks.PictureAnnotationColorDepthEnum;
 import osplus.esignanywhere.v4.model.WorkstepTasks.PositionUnitsEnum;
 import osplus.esignanywhere.v4.model.WorkstepTasks.ReferenceCornerEnum;
@@ -86,71 +71,11 @@ public class App implements Runnable {
         return apiClient;
     }
 
-    private static class SspFileApi2 extends SspFileApi {
-        public SspFileApi2(final ApiClient apiClient) {
-            super(apiClient);
-        }
-
-        // See link: https://medium.com/red6-es/uploading-a-file-with-a-filename-with-spring-resttemplate-8ec5e7dc52ca
-
-        @Override
-        public ResponseEntity<UploadSspFileResult> sspFileUploadTemporaryFromByteArrayWithHttpInfo(final String filename,
-                final byte[] content) throws RestClientException {
-            Object postBody = null;
-
-            // verify the required parameter 'filename' is set
-            if (filename == null || filename.isEmpty()) {
-                throw new HttpClientErrorException(HttpStatus.BAD_REQUEST,
-                        "Missing the required parameter 'filename' when calling sspFileUploadTemporary");
-            }
-
-            final boolean hasPdfExtension = filename.toLowerCase().endsWith(".pdf");
-
-            // verify the required parameter 'content' is set
-            if (content == null || content.length == 0) {
-                throw new HttpClientErrorException(HttpStatus.BAD_REQUEST,
-                        "Missing the required parameter 'content' when calling sspFileUploadTemporary");
-            }
-
-            final String path = getApiClient().expandPath("/v4.0/sspfile/uploadtemporary",
-                    Collections.<String, Object>emptyMap());
-
-            final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
-            final HttpHeaders headerParams = new HttpHeaders();
-            final MultiValueMap<String, String> cookieParams = new LinkedMultiValueMap<String, String>();
-            final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
-
-            final MultiValueMap<String, String> fileMap = new LinkedMultiValueMap<>();
-            final ContentDisposition contentDisposition = ContentDisposition.builder("form-data").name("file")
-                    .filename(filename).build();
-            fileMap.add(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString());
-            if (hasPdfExtension) {
-                fileMap.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
-            }
-
-            final HttpEntity<byte[]> fileEntity = new HttpEntity<>(content, fileMap);
-            formParams.add("file", fileEntity);
-
-            final String[] localVarAccepts = { "application/json", "text/json" };
-            final List<MediaType> localVarAccept = getApiClient().selectHeaderAccept(localVarAccepts);
-
-            final String[] contentTypes = { "multipart/form-data" };
-            final MediaType contentType = getApiClient().selectHeaderContentType(contentTypes);
-
-            final String[] authNames = new String[] { "organizationKey", "userLoginName" };
-
-            final ParameterizedTypeReference<UploadSspFileResult> returnType = new ParameterizedTypeReference<UploadSspFileResult>() {
-            };
-            return getApiClient().invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, cookieParams,
-                    formParams, localVarAccept, contentType, authNames, returnType);
-        }
-    }
-
     private SspFileApi sspFileApi = null;
 
     private SspFileApi getSspFileApi() {
         if (sspFileApi == null) {
-            sspFileApi = new SspFileApi2(getApiClient());
+            sspFileApi = new SspFileApi(getApiClient());
         }
         return sspFileApi;
     }
