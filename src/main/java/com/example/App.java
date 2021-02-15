@@ -67,50 +67,51 @@ public class App implements Runnable {
         if (esignAnywhereClient == null) {
             esignAnywhereClient = ESignAnywhereClient.builder()
                 .setBasePath("https://saas.esignanywhere.net/Api")
-                .addHeader("ApiToken", "mh24gps8u1xkqaxp4l34sgmm6qnxn438b1acq510fjk5vjqtdqilzgm7utgvrq7a")
+                .setApiToken("mh24gps8u1xkqaxp4l34sgmm6qnxn438b1acq510fjk5vjqtdqilzgm7utgvrq7a")
+                //.addHeader("ApiToken", "mh24gps8u1xkqaxp4l34sgmm6qnxn438b1acq510fjk5vjqtdqilzgm7utgvrq7a")
                 .build();
         }
         return esignAnywhereClient;
     }
 
-    private ApiClient apiClient = null;
+    // private ApiClient apiClient = null;
 
-    private ApiClient getApiClient() {
-        if (apiClient == null) {
-            apiClient = new ApiClient();
-            apiClient.setDebugging(false);
-            apiClient.setBasePath("https://saas.esignanywhere.net/Api");
-            apiClient.addDefaultHeader("ApiToken", "mh24gps8u1xkqaxp4l34sgmm6qnxn438b1acq510fjk5vjqtdqilzgm7utgvrq7a");
-        }
-        return apiClient;
-    }
+    // private ApiClient getApiClient() {
+    //     if (apiClient == null) {
+    //         apiClient = new ApiClient();
+    //         apiClient.setDebugging(false);
+    //         apiClient.setBasePath("https://saas.esignanywhere.net/Api");
+    //         apiClient.addDefaultHeader("ApiToken", "mh24gps8u1xkqaxp4l34sgmm6qnxn438b1acq510fjk5vjqtdqilzgm7utgvrq7a");
+    //     }
+    //     return apiClient;
+    // }
 
-    private SspFileApi sspFileApi = null;
+    // private SspFileApi sspFileApi = null;
 
-    private SspFileApi getSspFileApi() {
-        if (sspFileApi == null) {
-            sspFileApi = new SspFileApi(getApiClient());
-        }
-        return sspFileApi;
-    }
+    // private SspFileApi getSspFileApi() {
+    //     if (sspFileApi == null) {
+    //         sspFileApi = new SspFileApi(getApiClient());
+    //     }
+    //     return sspFileApi;
+    // }
 
-    private VersionApi versionApi = null;
+    // private VersionApi versionApi = null;
 
-    private VersionApi getVersionApi() {
-        if (versionApi == null) {
-            versionApi = new VersionApi(getApiClient());
-        }
-        return versionApi;
-    }
+    // private VersionApi getVersionApi() {
+    //     if (versionApi == null) {
+    //         versionApi = new VersionApi(getApiClient());
+    //     }
+    //     return versionApi;
+    // }
 
-    private EnvelopeApi envelopeApi = null;
+    // private EnvelopeApi envelopeApi = null;
 
-    private EnvelopeApi getEnvelopeApi() {
-        if (envelopeApi == null) {
-            envelopeApi = new EnvelopeApi(getApiClient());
-        }
-        return envelopeApi;
-    }
+    // private EnvelopeApi getEnvelopeApi() {
+    //     if (envelopeApi == null) {
+    //         envelopeApi = new EnvelopeApi(getApiClient());
+    //     }
+    //     return envelopeApi;
+    // }
 
     private File getTestPdf() throws URISyntaxException {
         final URL resource = getClass().getClassLoader().getResource("Test.pdf");
