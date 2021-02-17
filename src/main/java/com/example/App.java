@@ -415,7 +415,7 @@ public class App implements Runnable {
             EnvelopeStatus envelopeStatus = null;
 
             for (;;) {
-                envelopeStatus = getESignAnywhereClient().getEnvelopeStatus(sendEnvelopeResult.getEnvelopeId());
+                envelopeStatus = getESignAnywhereClient().queryEnvelopeStatus(sendEnvelopeResult.getEnvelopeId());
                 System.out.println("EnvelopeStatus: " + envelopeStatus.getStatus());
                 if (envelopeStatus.getStatus() == StatusEnum.COMPLETED) {
                     break;
@@ -425,7 +425,7 @@ public class App implements Runnable {
 
             for (final FinishedDocument finishedDocument : envelopeStatus.getBulks().get(0).getFinishedDocuments()) {
                 System.out.println("FinishedDocument: " + finishedDocument);
-                final byte[] finishedDocumentContent = getESignAnywhereClient().downloadCompletedDocument(finishedDocument.getFlowDocumentId());
+                final byte[] finishedDocumentContent = getESignAnywhereClient().downloadCompletedDocumentAsByteArray(finishedDocument.getFlowDocumentId());
                 Files.write(Paths.get(finishedDocument.getFileName()), finishedDocumentContent, StandardOpenOption.CREATE);
             }
         }  catch (final Exception e) {
