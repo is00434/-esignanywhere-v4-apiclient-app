@@ -428,7 +428,13 @@ public class App implements Runnable {
                 final byte[] finishedDocumentContent = getESignAnywhereClient().downloadCompletedDocumentAsByteArray(finishedDocument.getFlowDocumentId());
                 Files.write(Paths.get(finishedDocument.getFileName()), finishedDocumentContent, StandardOpenOption.CREATE);
             }
-        }  catch (final Exception e) {
+        } catch (final ESignAnywhereClientException e) {
+            if (e.hasESignAnywhereError()) {
+                System.err.println(e.getESignAnywhereError());
+            } else {
+                System.err.println(e);            
+            }
+        } catch (final Exception e) {
             System.err.println(e.getMessage());
         }
     }
